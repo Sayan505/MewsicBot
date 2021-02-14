@@ -10,6 +10,7 @@ using DSharpPlus.EventArgs;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.CommandsNext.Exceptions;
+using DSharpPlus.VoiceNext;
 
 using Newtonsoft.Json;
 
@@ -19,6 +20,7 @@ namespace MewsicBot_Core
     {
         private DiscordClient discordClient  { get; set; }
         private CommandsNextModule Commands  { get; set; }
+        private VoiceNextClient Voice        { get; set; }
 
         internal MewsicBot() { }
 
@@ -67,26 +69,37 @@ namespace MewsicBot_Core
             discordClient.ClientErrored  += OnDiscordClient_ClientErrorHandler;
 
             // config commands
-            CommandsNextConfiguration command_config = new CommandsNextConfiguration
+            CommandsNextConfiguration commands_config = new CommandsNextConfiguration
             {
                 StringPrefix        = Unmarshalled_Config_dot_json.StringPrefix,
                 EnableDms           = Unmarshalled_Config_dot_json.EnableDms,
                 EnableMentionPrefix = Unmarshalled_Config_dot_json.EnableMentionPrefix
             };
-            Commands = discordClient.UseCommandsNext(command_config);
+            Commands = discordClient.UseCommandsNext(commands_config);  // apply commands config
+
+            // config voice
+            VoiceNextConfiguration voice_config = new VoiceNextConfiguration
+            {
+                EnableIncoming = false,
+            };
+
+            // init voice
+            Voice = discordClient.UseVoiceNext(voice_config);
 
             // rig command events
             Commands.CommandExecuted += OnCommands_CommandExecuted;
             Commands.CommandErrored  += OnCommands_CommandErrored;
 
-            // register commands
-            Commands.RegisterCommands<MewsicBot_Core.Modules.Modules>();
-
             Console.WriteLine($"[Y] MewsicBot: Configs loaded.");
 
+            // register commands
+            Commands.RegisterCommands<MewsicBot_Core.Modules.Latency>();    // latency module
+            Console.WriteLine($"[Y] MewsicBot: Modules loaded.");
+
             // log in
-            Console.WriteLine($"[-] MewsicBot: Connecting...");
+            Console.WriteLine($"[-] MewsicBot: Connecting..."); // TODO: log connection attempt
             await discordClient.ConnectAsync();
+
 
             // infinite await
             await Task.Delay(-1);
