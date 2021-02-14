@@ -5,13 +5,18 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 
 using DSharpPlus;
+using DSharpPlus.Net;
 using DSharpPlus.Entities;
+using DSharpPlus.Lavalink;
+using DSharpPlus.VoiceNext;
 using DSharpPlus.EventArgs;
+using DSharpPlus.Interactivity;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.CommandsNext.Exceptions;
-using DSharpPlus.VoiceNext;
-using DSharpPlus.Lavalink;
+
+
+
 
 using Newtonsoft.Json;
 
@@ -22,6 +27,7 @@ namespace MewsicBot_Core
         private DiscordClient discordClient     { get; set; }
         private CommandsNextExtension Commands  { get; set; }
         private VoiceNextExtension Voice        { get; set; }
+        private LavalinkExtension lavaLink      { get; set; }
 
         internal MewsicBot() { }
 
@@ -78,14 +84,28 @@ namespace MewsicBot_Core
             };
             Commands = discordClient.UseCommandsNext(commands_config);  // apply commands config
 
-            // config voice
-            VoiceNextConfiguration voice_config = new VoiceNextConfiguration
+            // config VoiceNext
+            VoiceNextConfiguration voiceNext = new VoiceNextConfiguration
             {
                 EnableIncoming = false
             };
 
             // init voice
-            Voice = discordClient.UseVoiceNext(voice_config);
+            Voice = discordClient.UseVoiceNext(voiceNext);
+
+            // config LavaLink
+            ConnectionEndpoint connectionEndpoint = new ConnectionEndpoint
+            {
+                Hostname = "localhost",
+                Port     = 2333
+            };
+            LavalinkConfiguration lavalinkConfiguration = new LavalinkConfiguration
+            {
+                Password       = "[REDACTED]",
+                RestEndpoint   = connectionEndpoint,
+                SocketEndpoint = connectionEndpoint
+            };
+            lavaLink = discordClient.UseLavalink();
 
             // rig command events
             Commands.CommandExecuted += OnCommands_CommandExecuted;
@@ -100,6 +120,9 @@ namespace MewsicBot_Core
             // log in
             Console.WriteLine($"[-] MewsicBot: Connecting..."); // TODO: log connection attempt
             await discordClient.ConnectAsync();
+
+            // init LavaLink
+            await lavaLink.ConnectAsync(lavalinkConfiguration);
 
 
             // infinite await
