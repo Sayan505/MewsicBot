@@ -7,7 +7,7 @@ using DSharpPlus.CommandsNext.Attributes;
 
 namespace MewsicBot_Core.Modules
 {
-    class Latency
+    class Latency : BaseCommandModule
     {
         [Command("ping")]
         public async Task Ping(CommandContext ctx)

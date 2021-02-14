@@ -5,8 +5,8 @@ namespace MewsicBot_Core
     // Config.json
     internal struct Config
     {
-        [JsonProperty("StringPrefix")]
-        internal string StringPrefix { get; private set; }
+        [JsonProperty("StringPrefixes")]
+        internal string[] StringPrefixes { get; set; }
 
         [JsonProperty("AutoReconnect")]
         internal bool AutoReconnect { get; private set; }  // true
@@ -26,11 +26,13 @@ namespace MewsicBot_Core
     }
 }
 
+// UTF-8
+
 /*
 Config.json:
 
 {
-  "StringPrefix": ",",
+  "StringPrefixes": [ "#", ",", "!" ],
   "AutoReconnect": true,
   "EnableDms": true,
   "EnableMentionPrefix": true

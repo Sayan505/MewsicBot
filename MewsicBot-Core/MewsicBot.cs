@@ -11,6 +11,7 @@ using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.CommandsNext.Exceptions;
 using DSharpPlus.VoiceNext;
+using DSharpPlus.Lavalink;
 
 using Newtonsoft.Json;
 
@@ -18,9 +19,9 @@ namespace MewsicBot_Core
 {
     class MewsicBot
     {
-        private DiscordClient discordClient  { get; set; }
-        private CommandsNextModule Commands  { get; set; }
-        private VoiceNextClient Voice        { get; set; }
+        private DiscordClient discordClient     { get; set; }
+        private CommandsNextExtension Commands  { get; set; }
+        private VoiceNextExtension Voice        { get; set; }
 
         internal MewsicBot() { }
 
@@ -31,7 +32,7 @@ namespace MewsicBot_Core
             string Config_dot_json = string.Empty;
             Config Unmarshalled_Config_dot_json = new Config();
 
-            using (var buffer = new StreamReader(File.OpenRead("./Config/Config.json")))
+            using (var buffer = new StreamReader(File.OpenRead("./Config/Config.json"), new UTF8Encoding(true)))
             {
                 Console.WriteLine($"[Y] MewsicBot: Loading \"Config.json\"");
                 Config_dot_json = await buffer.ReadToEndAsync();
@@ -44,22 +45,22 @@ namespace MewsicBot_Core
             string Token_dot_json = string.Empty;
             Token Unmarshalled_Token_dot_json = new Token();
 
-            using (var buffer = new StreamReader(File.OpenRead("./Config/Token.json")))
+            using (var buffer = new StreamReader(File.OpenRead("./Config/Token.json"), new UTF8Encoding(true)))
             {
                 Console.WriteLine($"[Y] MewsicBot: Loading \"Token.json\"");
                 Token_dot_json = await buffer.ReadToEndAsync();
 
-                Console.WriteLine($"[Y] MewsicBot: Un-marshalling \"Config.json\"");
+                Console.WriteLine($"[Y] MewsicBot: Un-marshalling \"Token.json\"");
                 Unmarshalled_Token_dot_json = JsonConvert.DeserializeObject<Token>(Token_dot_json);
             }
 
             // config bot
             DiscordConfiguration config = new DiscordConfiguration
             {
-                Token         = Unmarshalled_Token_dot_json.Bot_Token,
-                TokenType     = TokenType.Bot,
-                AutoReconnect = Unmarshalled_Config_dot_json.AutoReconnect,
-                LogLevel      = DSharpPlus.LogLevel.Error
+                Token           = Unmarshalled_Token_dot_json.Bot_Token,
+                TokenType       = TokenType.Bot,
+                AutoReconnect   = Unmarshalled_Config_dot_json.AutoReconnect,
+                MinimumLogLevel = LogLevel.Error
             };
             discordClient = new DiscordClient(config); // init client
 
@@ -71,7 +72,7 @@ namespace MewsicBot_Core
             // config commands
             CommandsNextConfiguration commands_config = new CommandsNextConfiguration
             {
-                StringPrefix        = Unmarshalled_Config_dot_json.StringPrefix,
+                StringPrefixes      = Unmarshalled_Config_dot_json.StringPrefixes,
                 EnableDms           = Unmarshalled_Config_dot_json.EnableDms,
                 EnableMentionPrefix = Unmarshalled_Config_dot_json.EnableMentionPrefix
             };
@@ -80,7 +81,7 @@ namespace MewsicBot_Core
             // config voice
             VoiceNextConfiguration voice_config = new VoiceNextConfiguration
             {
-                EnableIncoming = false,
+                EnableIncoming = false
             };
 
             // init voice
@@ -105,7 +106,7 @@ namespace MewsicBot_Core
             await Task.Delay(-1);
         }
 
-        private Task OnCommands_CommandExecuted(CommandExecutionEventArgs e)
+        private Task OnCommands_CommandExecuted(CommandsNextExtension sender, CommandExecutionEventArgs e)
         {
             Console.WriteLine($"[Y] MewsicBot: Command \"{e.Command.QualifiedName}\" executed by \"{e.Context.User.Username}\" in \"{e.Context.Guild.Name}\" @ {DateTime.Now}.");  // local time
             // TODO: log it
@@ -113,7 +114,7 @@ namespace MewsicBot_Core
             return Task.CompletedTask;
         }
 
-        private Task OnCommands_CommandErrored(CommandErrorEventArgs e)
+        private Task OnCommands_CommandErrored(CommandsNextExtension sender, CommandErrorEventArgs e)
         {
             Console.WriteLine($"[X] MewsicBot: Command \"{e.Command.QualifiedName}\" failed exec by \"{e.Context.User.Username}\" in \"{e.Context.Guild.Name}\" @ {DateTime.Now}.");  // local time
             // TODO: log it
@@ -121,7 +122,7 @@ namespace MewsicBot_Core
             return Task.CompletedTask;
         }
 
-        private Task OnDiscordClient_Ready(ReadyEventArgs e)
+        private Task OnDiscordClient_Ready(DiscordClient sender, ReadyEventArgs e)
         {
             Console.WriteLine($"[Y] MewsicBot: ONLINE @ {DateTime.Now}.");  // local time
             // TODO: log it
@@ -129,7 +130,7 @@ namespace MewsicBot_Core
             return Task.CompletedTask;
         }
 
-        private Task OnDiscordClient_GuildAvailable(GuildCreateEventArgs e)
+        private Task OnDiscordClient_GuildAvailable(DiscordClient sender, GuildCreateEventArgs e)
         {
             Console.WriteLine($"[Y] MewsicBot: Connected to \"{e.Guild.Name}\" @ {DateTime.Now}.");  // local time
             // TODO: log it
@@ -137,7 +138,7 @@ namespace MewsicBot_Core
             return Task.CompletedTask;
         }
 
-        private Task OnDiscordClient_ClientErrorHandler(ClientErrorEventArgs e)
+        private Task OnDiscordClient_ClientErrorHandler(DiscordClient sender, ClientErrorEventArgs e)
         {
             Console.WriteLine($"[X] MewsicBot: ERROR: {e.Exception.Message} @ {DateTime.Now}.");  // local time
             // TODO: log it

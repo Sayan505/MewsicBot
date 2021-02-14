@@ -1,5 +1,5 @@
 ﻿{
-  "StringPrefix": ",",
+  "StringPrefixes": [ "#", ",", "!" ],
   "AutoReconnect": true,
   "EnableDms": true,
   "EnableMentionPrefix": true
