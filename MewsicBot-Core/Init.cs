@@ -8,7 +8,7 @@ namespace MewsicBot_Core
     {
         static int Main(string[] args)
         {
-            Console.WriteLine($"[Y] MewsicBot: init @ {DateTime.Now}, {TimeZoneInfo.Local.Id}");  // local time
+            Console.WriteLine($"[Y] MewsicBot: init @ {DateTime.Now}.");  // local time
             // TODO: log it
 
             try
@@ -18,12 +18,14 @@ namespace MewsicBot_Core
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
+                // TODO: log the exception
             }
             finally
             {
                 // TODO: clean up
-                // TODO: log exit
+                // TODO: log exit after crash
             }
+
 
             Console.ReadKey();
 

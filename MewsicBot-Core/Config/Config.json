@@ -1,0 +1,6 @@
+﻿{
+  "StringPrefix": ",",
+  "AutoReconnect": true,
+  "EnableDms": true,
+  "EnableMentionPrefix": true
+}

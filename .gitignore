@@ -338,3 +338,6 @@ ASALocalRun/
 
 # BeatPulse healthcheck temp database
 healthchecksdb
+
+# Discord Bot Token
+MewsicBot-Core/Config/Token.json
