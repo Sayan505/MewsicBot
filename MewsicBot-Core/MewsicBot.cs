@@ -8,7 +8,6 @@ using DSharpPlus;
 using DSharpPlus.Net;
 using DSharpPlus.Entities;
 using DSharpPlus.Lavalink;
-using DSharpPlus.VoiceNext;
 using DSharpPlus.EventArgs;
 using DSharpPlus.Interactivity;
 using DSharpPlus.CommandsNext;
@@ -26,7 +25,6 @@ namespace MewsicBot_Core
     {
         private DiscordClient discordClient     { get; set; }
         private CommandsNextExtension Commands  { get; set; }
-        private VoiceNextExtension Voice        { get; set; }
         private LavalinkExtension lavaLink      { get; set; }
 
         internal MewsicBot() { }
@@ -84,24 +82,15 @@ namespace MewsicBot_Core
             };
             Commands = discordClient.UseCommandsNext(commands_config);  // apply commands config
 
-            // config VoiceNext
-            VoiceNextConfiguration voiceNext = new VoiceNextConfiguration
-            {
-                EnableIncoming = false
-            };
-
-            // init voice
-            Voice = discordClient.UseVoiceNext(voiceNext);
-
             // config LavaLink
             ConnectionEndpoint connectionEndpoint = new ConnectionEndpoint
             {
-                Hostname = "localhost",
+                Hostname = "127.0.0.1",
                 Port     = 2333
             };
             LavalinkConfiguration lavalinkConfiguration = new LavalinkConfiguration
             {
-                Password       = "[REDACTED]",
+                Password       = "c2F5YW5AREVTS1RPUC1TQVlBTjovbW50L2Mvd2luZG93cy9zeXN0ZW0zMiQK",    // don't care :p
                 RestEndpoint   = connectionEndpoint,
                 SocketEndpoint = connectionEndpoint
             };
@@ -115,6 +104,7 @@ namespace MewsicBot_Core
 
             // register commands
             Commands.RegisterCommands<MewsicBot_Core.Modules.Latency>();    // latency module
+            Commands.RegisterCommands<MewsicBot_Core.Modules.Music>();      // music module
             Console.WriteLine($"[Y] MewsicBot: Modules loaded.");
 
             // log in

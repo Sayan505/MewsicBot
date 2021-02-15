@@ -341,3 +341,4 @@ healthchecksdb
 
 # Discord Bot Token
 MewsicBot-Core/Config/Token.json
+MewsicBot-Core/Lavalink/Lavalink.jar

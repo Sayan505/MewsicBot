@@ -9,7 +9,7 @@ namespace MewsicBot_Core.Modules
 {
     class Latency : BaseCommandModule
     {
-        [Command("ping")]
+        [Command("ping"), Aliases("Ping","latency", "ms", "delay")]
         public async Task Ping(CommandContext ctx)
         {
             await ctx.TriggerTypingAsync();
