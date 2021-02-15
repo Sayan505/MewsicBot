@@ -12,7 +12,8 @@ namespace MewsicBot_Core
             ProcessStartInfo processStartInfo = new ProcessStartInfo
             {
                 FileName = "cmd.exe",
-                Arguments = $@"/c java -jar Lavalink/Lavalink.jar",
+                WorkingDirectory = AppDomain.CurrentDomain.BaseDirectory,
+                Arguments = $@"/c cd {AppDomain.CurrentDomain.BaseDirectory}Lavalink & java -jar Lavalink.jar ",
                 CreateNoWindow = false,
                 UseShellExecute = true
             };
