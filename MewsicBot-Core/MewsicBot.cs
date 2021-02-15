@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Text;
+using System.Reflection;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -25,7 +26,6 @@ namespace MewsicBot_Core
         private CommandsNextExtension Commands  { get; set; }
         private LavalinkExtension lavaLink      { get; set; }
 
-        internal MewsicBot() { }
 
         // ENTRY:
         internal async Task ExecBotAsync()
@@ -101,8 +101,8 @@ namespace MewsicBot_Core
             Console.WriteLine($"[Y] MewsicBot: Configs loaded.");
 
             // register commands
-            Commands.RegisterCommands<MewsicBot_Core.Modules.Latency>();    // latency module
-            Commands.RegisterCommands<MewsicBot_Core.Modules.Music>();      // audio module
+            Commands.RegisterCommands<Modules.Latency>();    // latency module
+            Commands.RegisterCommands<Modules.Music>();      // audio module
             Console.WriteLine($"[Y] MewsicBot: Modules loaded.");
 
             // log in
@@ -126,7 +126,7 @@ namespace MewsicBot_Core
 
         private Task OnCommands_CommandErrored(CommandsNextExtension sender, CommandErrorEventArgs e)
         {
-            Console.WriteLine($"[X] MewsicBot: Command \"{e.Command.QualifiedName}\" failed exec by \"{e.Context.User.Username}\" in \"{e.Context.Guild.Name}\" @ {DateTime.Now}.");  // local time
+            Console.WriteLine($"[X] MewsicBot: Command failed exec by \"{e.Context.User.Username}\" in \"{e.Context.Guild.Name}\" @ {DateTime.Now}.");  // local time
 
             return Task.CompletedTask;
         }
