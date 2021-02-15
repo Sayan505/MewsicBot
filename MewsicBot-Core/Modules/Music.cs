@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
 
 using DSharpPlus;
 using DSharpPlus.Entities;
@@ -13,7 +12,7 @@ namespace MewsicBot_Core.Modules
 {
     class Music : BaseCommandModule
     {
-        [Command("join"), Aliases("Join")]
+        [Command("join")]
         public async Task Join(CommandContext ctx, DiscordChannel channel)
         {
             //Lavalink: https://github.com/Frederikam/Lavalink/releases

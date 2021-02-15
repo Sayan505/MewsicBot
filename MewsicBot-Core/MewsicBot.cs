@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Text;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 
@@ -13,9 +14,6 @@ using DSharpPlus.Interactivity;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.CommandsNext.Exceptions;
-
-
-
 
 using Newtonsoft.Json;
 
@@ -90,7 +88,7 @@ namespace MewsicBot_Core
             };
             LavalinkConfiguration lavalinkConfiguration = new LavalinkConfiguration
             {
-                Password       = "c2F5YW5AREVTS1RPUC1TQVlBTjovbW50L2Mvd2luZG93cy9zeXN0ZW0zMiQK",    // don't care :p
+                Password       = "12345",    // don't care :p
                 RestEndpoint   = connectionEndpoint,
                 SocketEndpoint = connectionEndpoint
             };
@@ -104,11 +102,11 @@ namespace MewsicBot_Core
 
             // register commands
             Commands.RegisterCommands<MewsicBot_Core.Modules.Latency>();    // latency module
-            Commands.RegisterCommands<MewsicBot_Core.Modules.Music>();      // music module
+            Commands.RegisterCommands<MewsicBot_Core.Modules.Music>();      // audio module
             Console.WriteLine($"[Y] MewsicBot: Modules loaded.");
 
             // log in
-            Console.WriteLine($"[-] MewsicBot: Connecting..."); // TODO: log connection attempt
+            Console.WriteLine($"[-] MewsicBot: Connecting...");
             await discordClient.ConnectAsync();
 
             // init LavaLink
@@ -122,7 +120,6 @@ namespace MewsicBot_Core
         private Task OnCommands_CommandExecuted(CommandsNextExtension sender, CommandExecutionEventArgs e)
         {
             Console.WriteLine($"[Y] MewsicBot: Command \"{e.Command.QualifiedName}\" executed by \"{e.Context.User.Username}\" in \"{e.Context.Guild.Name}\" @ {DateTime.Now}.");  // local time
-            // TODO: log it
 
             return Task.CompletedTask;
         }
@@ -130,7 +127,6 @@ namespace MewsicBot_Core
         private Task OnCommands_CommandErrored(CommandsNextExtension sender, CommandErrorEventArgs e)
         {
             Console.WriteLine($"[X] MewsicBot: Command \"{e.Command.QualifiedName}\" failed exec by \"{e.Context.User.Username}\" in \"{e.Context.Guild.Name}\" @ {DateTime.Now}.");  // local time
-            // TODO: log it
 
             return Task.CompletedTask;
         }
@@ -138,7 +134,6 @@ namespace MewsicBot_Core
         private Task OnDiscordClient_Ready(DiscordClient sender, ReadyEventArgs e)
         {
             Console.WriteLine($"[Y] MewsicBot: ONLINE @ {DateTime.Now}.");  // local time
-            // TODO: log it
 
             return Task.CompletedTask;
         }
@@ -146,7 +141,6 @@ namespace MewsicBot_Core
         private Task OnDiscordClient_GuildAvailable(DiscordClient sender, GuildCreateEventArgs e)
         {
             Console.WriteLine($"[Y] MewsicBot: Connected to \"{e.Guild.Name}\" @ {DateTime.Now}.");  // local time
-            // TODO: log it
 
             return Task.CompletedTask;
         }
@@ -154,7 +148,6 @@ namespace MewsicBot_Core
         private Task OnDiscordClient_ClientErrorHandler(DiscordClient sender, ClientErrorEventArgs e)
         {
             Console.WriteLine($"[X] MewsicBot: ERROR: {e.Exception.Message} @ {DateTime.Now}.");  // local time
-            // TODO: log it
 
             throw e.Exception;
         }
