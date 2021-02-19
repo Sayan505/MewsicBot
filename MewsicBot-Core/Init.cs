@@ -6,10 +6,13 @@ namespace MewsicBot_Core
 {
     class Init
     {
+        static ProcessStartInfo processStartInfo;
+        static Process Lavalink;
+
         static int Main(string[] args)
         {
             // init Lavalink (requires Java exec in path)
-            ProcessStartInfo processStartInfo = new ProcessStartInfo
+            processStartInfo = new ProcessStartInfo
             {
                 FileName = "cmd.exe",
                 WorkingDirectory = AppDomain.CurrentDomain.BaseDirectory,
@@ -18,7 +21,9 @@ namespace MewsicBot_Core
                 UseShellExecute = true
             };
 
-            Process Lavalink = Process.Start(processStartInfo);
+            Lavalink = Process.Start(processStartInfo);
+
+            AppDomain.CurrentDomain.ProcessExit += new EventHandler(Exit);
 
             Console.WriteLine($"[Y] MewsicBot: init @ {DateTime.Now}.");  // local time
 
@@ -35,6 +40,11 @@ namespace MewsicBot_Core
             Console.ReadKey();
 
             return 0;
+        }
+
+        static void Exit(object sender, EventArgs e)
+        {
+            Lavalink.Kill();
         }
     }
 }
