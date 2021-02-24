@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
 using System.Diagnostics;
 
 namespace MewsicBot_Core
@@ -25,6 +24,7 @@ namespace MewsicBot_Core
 
             AppDomain.CurrentDomain.ProcessExit += new EventHandler(Exit);
 
+            // start
             Console.WriteLine($"[Y] MewsicBot: init @ {DateTime.Now}.");  // local time
 
             try
@@ -44,7 +44,8 @@ namespace MewsicBot_Core
 
         static void Exit(object sender, EventArgs e)
         {
-            Lavalink.Kill();
+             Lavalink.Kill();
+
         }
     }
 }

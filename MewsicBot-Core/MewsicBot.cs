@@ -90,7 +90,7 @@ namespace MewsicBot_Core
             };
             LavalinkConfiguration lavalinkConfiguration = new LavalinkConfiguration
             {
-                Password       = "12345",    // don't care :p
+                Password       = "bWVvdwo",
                 RestEndpoint   = connectionEndpoint,
                 SocketEndpoint = connectionEndpoint
             };
